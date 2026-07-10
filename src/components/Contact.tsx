@@ -1,6 +1,36 @@
+import { useState } from 'react'
 import { Mail, MapPin, Phone } from 'lucide-react'
+import { supabase } from '../lib/supabaseClient'
+
+type Status = 'idle' | 'loading' | 'success' | 'error'
 
 export default function Contact() {
+  const [status, setStatus] = useState<Status>('idle')
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setStatus('loading')
+
+    const form = e.currentTarget
+    const formData = new FormData(form)
+    const name = formData.get('name') as string
+    const email = formData.get('email') as string
+    const message = formData.get('message') as string
+
+    const { error } = await supabase
+      .from('contact_messages')
+      .insert({ name, email, message })
+
+    if (error) {
+      console.error('Erreur Supabase (contact_messages) :', error)
+      setStatus('error')
+      return
+    }
+
+    setStatus('success')
+    form.reset()
+  }
+
   return (
     <section id="contact" className="relative py-24 grid-bg">
       <div className="mx-auto max-w-7xl px-6">
@@ -52,13 +82,7 @@ export default function Contact() {
             </div>
           </div>
 
-          <form
-            className="glass-panel rounded-xl p-8"
-            onSubmit={(e) => {
-              e.preventDefault()
-              alert('Message envoyé — nous vous recontacterons sous 24h.')
-            }}
-          >
+          <form className="glass-panel rounded-xl p-8" onSubmit={handleSubmit}>
             <div className="space-y-4">
               <div>
                 <label htmlFor="name" className="mb-1 block text-xs uppercase tracking-wider text-slate-500">
@@ -66,9 +90,11 @@ export default function Contact() {
                 </label>
                 <input
                   id="name"
+                  name="name"
                   type="text"
                   required
-                  className="w-full rounded-lg border border-white/10 bg-carbon px-4 py-3 text-sm text-white focus:border-electric/40 focus:outline-none"
+                  disabled={status === 'loading'}
+                  className="w-full rounded-lg border border-white/10 bg-carbon px-4 py-3 text-sm text-white focus:border-electric/40 focus:outline-none disabled:opacity-50"
                 />
               </div>
               <div>
@@ -77,9 +103,11 @@ export default function Contact() {
                 </label>
                 <input
                   id="email"
+                  name="email"
                   type="email"
                   required
-                  className="w-full rounded-lg border border-white/10 bg-carbon px-4 py-3 text-sm text-white focus:border-electric/40 focus:outline-none"
+                  disabled={status === 'loading'}
+                  className="w-full rounded-lg border border-white/10 bg-carbon px-4 py-3 text-sm text-white focus:border-electric/40 focus:outline-none disabled:opacity-50"
                 />
               </div>
               <div>
@@ -88,17 +116,31 @@ export default function Contact() {
                 </label>
                 <textarea
                   id="message"
+                  name="message"
                   rows={4}
                   required
-                  className="w-full rounded-lg border border-white/10 bg-carbon px-4 py-3 text-sm text-white focus:border-electric/40 focus:outline-none"
+                  disabled={status === 'loading'}
+                  className="w-full rounded-lg border border-white/10 bg-carbon px-4 py-3 text-sm text-white focus:border-electric/40 focus:outline-none disabled:opacity-50"
                 />
               </div>
               <button
                 type="submit"
-                className="font-display w-full rounded bg-electric py-4 text-sm font-semibold uppercase tracking-wider text-white transition-all hover:glow-blue"
+                disabled={status === 'loading'}
+                className="font-display w-full rounded bg-electric py-4 text-sm font-semibold uppercase tracking-wider text-white transition-all hover:glow-blue disabled:opacity-60"
               >
-                Envoyer
+                {status === 'loading' ? 'Envoi en cours...' : 'Envoyer'}
               </button>
+
+              {status === 'success' && (
+                <p className="text-center text-sm text-green-400">
+                  Message envoyé — nous vous recontacterons sous 24h.
+                </p>
+              )}
+              {status === 'error' && (
+                <p className="text-center text-sm text-red-400">
+                  Une erreur est survenue. Merci de réessayer ou de nous contacter par email.
+                </p>
+              )}
             </div>
           </form>
         </div>

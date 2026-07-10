@@ -1,23 +1,46 @@
 import { useState } from 'react'
 import { Bot, Send, CheckCircle2 } from 'lucide-react'
 import { assistantSteps } from '../data/content'
+import { supabase } from '../lib/supabaseClient'
 
 type Answers = Record<string, string>
+type Status = 'idle' | 'loading' | 'success' | 'error'
 
 export default function Assistant() {
   const [step, setStep] = useState(0)
   const [answers, setAnswers] = useState<Answers>({})
   const [inputValue, setInputValue] = useState('')
   const [submitted, setSubmitted] = useState(false)
+  const [status, setStatus] = useState<Status>('idle')
 
   const currentStep = assistantSteps[step]
   const isLastStep = step === assistantSteps.length - 1
+
+  const submitRequest = async (finalAnswers: Answers) => {
+    setStatus('loading')
+    const { error } = await supabase.from('assistant_requests').insert({
+      infrastructure: finalAnswers.infrastructure ?? null,
+      problem: finalAnswers.problem ?? null,
+      urgency: finalAnswers.urgency ?? null,
+      location: finalAnswers.location ?? null,
+      details: finalAnswers.details ?? null,
+    })
+
+    if (error) {
+      console.error('Erreur Supabase (assistant_requests) :', error)
+      setStatus('error')
+      return
+    }
+
+    setStatus('success')
+    setSubmitted(true)
+  }
 
   const handleOption = (value: string) => {
     const newAnswers = { ...answers, [currentStep.id]: value }
     setAnswers(newAnswers)
     if (isLastStep) {
-      setSubmitted(true)
+      submitRequest(newAnswers)
     } else {
       setStep(step + 1)
       setInputValue('')
@@ -34,6 +57,7 @@ export default function Assistant() {
     setAnswers({})
     setInputValue('')
     setSubmitted(false)
+    setStatus('idle')
   }
 
   return (
@@ -110,12 +134,18 @@ export default function Assistant() {
                       <button
                         key={option}
                         type="button"
+                        disabled={status === 'loading'}
                         onClick={() => handleOption(option)}
-                        className="rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-sm text-slate-300 transition-all hover:border-electric/40 hover:bg-electric/10 hover:text-white"
+                        className="rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-sm text-slate-300 transition-all hover:border-electric/40 hover:bg-electric/10 hover:text-white disabled:opacity-50"
                       >
                         {option}
                       </button>
                     ))}
+                    {status === 'error' && (
+                      <p className="mt-2 w-full text-sm text-red-400">
+                        Une erreur est survenue lors de l&apos;envoi. Réessayez.
+                      </p>
+                    )}
                   </div>
                 ) : (
                   <div className="ml-11">
@@ -139,12 +169,22 @@ export default function Assistant() {
                     )}
                     <button
                       type="button"
+                      disabled={status === 'loading'}
                       onClick={handleTextSubmit}
-                      className="mt-3 flex items-center gap-2 rounded bg-electric px-4 py-2 text-sm font-medium text-white transition-all hover:glow-blue"
+                      className="mt-3 flex items-center gap-2 rounded bg-electric px-4 py-2 text-sm font-medium text-white transition-all hover:glow-blue disabled:opacity-60"
                     >
                       <Send size={16} />
-                      {isLastStep ? 'Envoyer la demande' : 'Continuer'}
+                      {status === 'loading'
+                        ? 'Envoi en cours...'
+                        : isLastStep
+                          ? 'Envoyer la demande'
+                          : 'Continuer'}
                     </button>
+                    {status === 'error' && (
+                      <p className="mt-2 text-sm text-red-400">
+                        Une erreur est survenue lors de l&apos;envoi. Réessayez.
+                      </p>
+                    )}
                   </div>
                 )}
 
