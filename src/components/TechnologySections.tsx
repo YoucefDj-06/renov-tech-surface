@@ -33,7 +33,7 @@ export function Technology() {
   }, [])
 
   return (
-    <section id="technologie" ref={sectionRef} className="relative py-24 bg-carbon-light">
+    <section id="technologie" ref={sectionRef} className="relative py-24">
       <div className="mx-auto max-w-7xl px-6">
         <div className="mb-16 text-center">
           <p className="font-display text-sm font-semibold uppercase tracking-[0.25em] text-electric-bright">
@@ -105,7 +105,7 @@ export function Timeline() {
   }, [])
 
   return (
-    <section className="relative py-24 grid-bg">
+    <section className="relative py-24">
       <div className="mx-auto max-w-7xl px-6">
         <div className="mb-16 text-center">
           <p className="font-display text-sm font-semibold uppercase tracking-[0.25em] text-electric-bright">
@@ -157,7 +157,7 @@ export function Equipment() {
   ]
 
   return (
-    <section id="equipements" className="relative py-24 bg-carbon-light">
+    <section id="equipements" className="relative py-24">
       <div className="mx-auto max-w-7xl px-6">
         <div className="mb-12">
           <p className="font-display text-sm font-semibold uppercase tracking-[0.25em] text-electric-bright">
@@ -191,7 +191,7 @@ export function Equipment() {
 
 export function Safety() {
   return (
-    <section id="qualite" className="relative py-24 grid-bg">
+    <section id="qualite" className="relative py-24 photo-band">
       <div className="mx-auto max-w-7xl px-6">
         <div className="glass-panel glow-blue rounded-xl p-8 md:p-12">
           <div className="grid gap-8 lg:grid-cols-2">

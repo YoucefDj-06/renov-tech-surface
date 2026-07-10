@@ -1,4 +1,4 @@
-import { useRef, useMemo } from 'react'
+import { useRef, useMemo, useEffect, useState } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { Stars } from '@react-three/drei'
 import * as THREE from 'three'
@@ -148,9 +148,9 @@ function Scene() {
 
   return (
     <>
-      <color attach="background" args={['#0a0a0f']} />
-      <fog attach="fog" args={['#0a0a0f', 5, 25]} />
-      <ambientLight intensity={0.15} />
+      <color attach="background" args={['#181b22']} />
+      <fog attach="fog" args={['#181b22', 5, 25]} />
+      <ambientLight intensity={0.25} />
       <pointLight position={[2, 3, 2]} intensity={0.5} color="#0066ff" />
       <pointLight position={[-1, 1, -2]} intensity={0.8} color="#ff6b00" />
       <directionalLight position={[0, 5, -5]} intensity={0.3} color="#ffffff" />
@@ -162,11 +162,25 @@ function Scene() {
 }
 
 export default function RailScene() {
+  // Mount the WebGL canvas one frame after the section itself has painted.
+  // Creating the WebGL context + building the scene is synchronous work; doing it
+  // in the same paint as the hero text is what caused the half-second freeze/stutter
+  // when this section first appeared. Deferring it lets the browser paint the
+  // static background first, then bring the animated scene in a beat later.
+  const [ready, setReady] = useState(false)
+
+  useEffect(() => {
+    const id = requestAnimationFrame(() => setReady(true))
+    return () => cancelAnimationFrame(id)
+  }, [])
+
   return (
-    <div className="absolute inset-0">
-      <Canvas camera={{ position: [0, 1.2, 3], fov: 60 }} dpr={[1, 1.5]}>
-        <Scene />
-      </Canvas>
+    <div className="absolute inset-0 bg-carbon">
+      {ready && (
+        <Canvas camera={{ position: [0, 1.2, 3], fov: 60 }} dpr={[1, 1.5]} frameloop="always">
+          <Scene />
+        </Canvas>
+      )}
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-carbon/60 via-transparent to-carbon" />
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-carbon/40 via-transparent to-carbon/40" />
     </div>

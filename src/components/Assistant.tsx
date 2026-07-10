@@ -61,7 +61,7 @@ export default function Assistant() {
   }
 
   return (
-    <section id="assistant" className="relative py-24 bg-carbon-light">
+    <section id="assistant" className="relative py-24">
       <div className="mx-auto max-w-3xl px-6">
         <div className="mb-10 text-center">
           <p className="font-display text-sm font-semibold uppercase tracking-[0.25em] text-electric-bright">

@@ -26,7 +26,7 @@ export default function ControlPanel() {
   }, [])
 
   return (
-    <section id="controle" ref={sectionRef} className="relative py-24 grid-bg">
+    <section id="controle" ref={sectionRef} className="relative py-24">
       <div className="mx-auto max-w-7xl px-6">
         <div className="grid gap-8 lg:grid-cols-2 lg:gap-16">
           <div>

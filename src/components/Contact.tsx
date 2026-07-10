@@ -32,7 +32,7 @@ export default function Contact() {
   }
 
   return (
-    <section id="contact" className="relative py-24 grid-bg">
+    <section id="contact" className="relative py-24">
       <div className="mx-auto max-w-7xl px-6">
         <div className="grid gap-12 lg:grid-cols-2">
           <div>
@@ -54,8 +54,8 @@ export default function Contact() {
                 </div>
                 <div>
                   <p className="text-xs uppercase tracking-wider text-slate-500">Email</p>
-                  <a href="mailto:contact@renov-tech-surface.fr" className="text-slate-200 hover:text-electric-bright">
-                    contact@renov-tech-surface.fr
+                  <a href="mailto:contact@renovtech.dz" className="text-slate-200 hover:text-electric-bright">
+                    contact@renovtech.dz
                   </a>
                 </div>
               </div>
@@ -65,8 +65,11 @@ export default function Contact() {
                 </div>
                 <div>
                   <p className="text-xs uppercase tracking-wider text-slate-500">Téléphone</p>
-                  <a href="tel:+33000000000" className="text-slate-200 hover:text-electric-bright">
-                    +33 (0)X XX XX XX XX
+                  <a href="tel:+213660772169" className="block text-slate-200 hover:text-electric-bright">
+                    06 60 77 21 69
+                  </a>
+                  <a href="tel:+213561608848" className="block text-slate-200 hover:text-electric-bright">
+                    05 61 60 88 48
                   </a>
                 </div>
               </div>
@@ -76,7 +79,14 @@ export default function Contact() {
                 </div>
                 <div>
                   <p className="text-xs uppercase tracking-wider text-slate-500">Zone d&apos;intervention</p>
-                  <p className="text-slate-200">France — Ferroviaire & Tramway</p>
+                  <a
+                    href="https://maps.app.goo.gl/auBaWwT5VoBY7goM7?g_st=aw"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-slate-200 hover:text-electric-bright"
+                  >
+                    Oran, Algérie — Ferroviaire & Tramway
+                  </a>
                 </div>
               </div>
             </div>
@@ -151,7 +161,7 @@ export default function Contact() {
 
 export function Footer() {
   return (
-    <footer className="border-t border-white/5 bg-carbon py-12">
+    <footer className="relative border-t border-white/5 py-12">
       <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-6 px-6 md:flex-row">
         <img src="/assets/logo.png" alt="RENOV-TECH SURFACE" className="h-8 w-auto opacity-80" />
         <p className="text-sm text-slate-500">

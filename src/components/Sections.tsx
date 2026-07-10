@@ -107,7 +107,7 @@ export function Solutions() {
   ]
 
   return (
-    <section id="solutions" ref={sectionRef} className="relative py-24 bg-carbon-light">
+    <section id="solutions" ref={sectionRef} className="relative py-24">
       <div className="mx-auto max-w-7xl px-6">
         <div className="mb-16 text-center">
           <p className="font-display text-sm font-semibold uppercase tracking-[0.25em] text-electric-bright">
@@ -184,7 +184,7 @@ export function Missions() {
   ]
 
   return (
-    <section id="realisations" ref={sectionRef} className="relative py-24 grid-bg">
+    <section id="realisations" ref={sectionRef} className="relative py-24">
       <div className="mx-auto max-w-7xl px-6">
         <div className="mb-16">
           <p className="font-display text-sm font-semibold uppercase tracking-[0.25em] text-electric-bright">

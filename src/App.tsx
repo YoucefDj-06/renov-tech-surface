@@ -9,6 +9,7 @@ import Contact, { Footer } from './components/Contact'
 export default function App() {
   return (
     <>
+      <div className="site-canvas" aria-hidden="true" />
       <Navigation />
       <main>
         <Hero />
